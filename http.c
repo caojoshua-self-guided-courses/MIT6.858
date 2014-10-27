@@ -276,6 +276,12 @@ void http_serve(int fd, const char *name)
     char pn[1024];
     struct stat st;
 
+    const char *http_host = getenv("HTTP_HOST");
+    if (!http_host || strcmp(http_host, "localhost:8080")) {
+        http_err(fd, 500, "Please access the site as http://localhost:8080/");
+        return;
+    }
+
     getcwd(pn, sizeof(pn));
     setenv("DOCUMENT_ROOT", pn, 1);
 
