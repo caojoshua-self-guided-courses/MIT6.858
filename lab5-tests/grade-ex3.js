@@ -73,7 +73,7 @@ function main(studentDir) {
         // quickly. They should lose points if they don't register
         // event listeners.
 
-	var target = "http://css.csail.mit.edu/6.858/2013/";
+	var target = "http://css.csail.mit.edu/6.858/2014/";
         console.log("Loading attacker page, logged in. If you get a timeout here, you're not redirecting to " + target + ".");
         page.open(answerPath);
         page.onLoadFinished = function(status) {
