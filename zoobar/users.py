@@ -1,5 +1,6 @@
 from flask import g, render_template, request, Markup
 
+import htmlfilter
 from login import requirelogin
 from zoodb import *
 from debug import *
@@ -20,7 +21,7 @@ def users():
             if p.startswith("#!python"):
                 p = run_profile(user)
 
-            p_markup = Markup("<b>%s</b>" % p)
+            p_markup = Markup(htmlfilter.filter_html(p))
             args['profile'] = p_markup
 
             args['user'] = user

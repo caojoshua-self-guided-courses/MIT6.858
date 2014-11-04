@@ -11,9 +11,11 @@ zookld zookd zookfs: %: %.o http.o
 
 
 .PHONY: check
-check: $(PROGS)
-	./check-lab5.sh
-
+check:
+	./check-lab6.sh
+.PHONY: check-experimental
+check-experimental:
+	./check-lab6-experimental.sh
 
 
 
@@ -30,24 +32,24 @@ lab%-handin.tar.gz: clean
 	tar cf - `find . -type f | grep -v '^\.*$$' | grep -v '/CVS/' | grep -v '/\.svn/' | grep -v '/\.git/' | grep -v 'lab[0-9].*\.tar\.gz' | grep -v '/submit.token$$' | grep -v libz3str.so` | gzip > $@
 
 .PHONY: prepare-submit
-prepare-submit: lab5-handin.tar.gz
+prepare-submit: lab6-handin.tar.gz
 
 .PHONY: prepare-submit-a
-prepare-submit-a: lab5a-handin.tar.gz
+prepare-submit-a: lab6a-handin.tar.gz
 
 .PHONY: prepare-submit-b
-prepare-submit-b: lab5b-handin.tar.gz
+prepare-submit-b: lab6b-handin.tar.gz
 
 .PHONY: submit-a
-submit-a: lab5a-handin.tar.gz
+submit-a: lab6a-handin.tar.gz
 	./submit.py $<
 
 .PHONY: submit-b
-submit-b: lab5b-handin.tar.gz
+submit-b: lab6b-handin.tar.gz
 	./submit.py $<
 
 .PHONY: submit
-submit: lab5-handin.tar.gz
+submit: lab6-handin.tar.gz
 	./submit.py $<
 
-.PRECIOUS: lab5-handin.tar.gz
+.PRECIOUS: lab6-handin.tar.gz
