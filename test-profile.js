@@ -59,7 +59,19 @@ function runTest(test, cb) {
         cb = undefined;
     }, 10 * 1000);
 
-    page.open(test);
+    page.open(test, function () {
+        page.evaluate(function () {
+            var all = document.getElementsByTagName("*");
+            for (var i = 0; i < all.length; i++) {
+                var elem = all[i];
+                if (elem.textContent.indexOf("Click me") >= 0) {
+                    var evt = document.createEvent("HTMLEvents");
+                    evt.initEvent('click', true, true);
+                    elem.dispatchEvent(evt);
+                }
+            }
+        });
+    });
 }
 
 runTest(args[1], function() {

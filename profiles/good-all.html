@@ -39,6 +39,14 @@
 
     var scrollcount = 0;
 
+    var x = { 'target':
+              { 'ownerDocument':
+                { 'defaultView':
+                  { 'eval': function (i) { return i + 3 } }
+                }
+              }
+            };
+
     function scroll(id) {
         scrollcount = scrollcount + 1;
         if (scrollcount == 5) {
@@ -54,6 +62,8 @@
             } else if (obj.foo !== 42 || obj["foo"] !== 42 ||
                        obj.bar !== 42 || obj["bar"] !== 42) {
                 grader('http://localhost:8900/test-broken-6');
+            } else if (x.target.ownerDocument.defaultView.eval(5) != 8) {
+                grader('http://localhost:8900/test-broken-7');
             } else {
                 grader('http://localhost:8900/test-ok');
             }
