@@ -13,10 +13,6 @@ zookld zookd zookfs: %: %.o http.o
 .PHONY: check
 check:
 	./check-lab6.sh
-.PHONY: check-experimental
-check-experimental:
-	./check-lab6-experimental.sh
-
 
 
 .PHONY: fix-flask
