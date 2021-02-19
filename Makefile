@@ -102,3 +102,10 @@ submit: lab1-handin.tar.gz
 	./submit.py $<
 
 .PRECIOUS: lab1-handin.tar.gz
+
+tags:
+	ctags -R .
+
+cscope:
+	find . -name "*.c" -o -name "*.h" > cscope.files && \
+	cscope -b -k -q
