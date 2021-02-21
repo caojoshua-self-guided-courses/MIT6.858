@@ -3,13 +3,17 @@
 
 [zookd.c:40]
 Can buffer overflow beyond the end of svcfds by providing number
-of services greater than MAX_SERVICES(256).
+of services greater than MAX_SERVICES(256). Overflow can occuer
+only by input directly from the server-side, and not through client
+provided http inputs.
 
     if (recvfd(fd, url, sizeof(url), &svcfds[i]) <= 0)
 
 [zookd.c:45]
 Can buffer overflow beyond the end of svcurls by providing number
-of services greater than MAX_SERVICES(256).
+of services greater than MAX_SERVICES(256). Overflow can occuer
+only by input directly from the server-side, and not through client
+provided http inputs.
 
     if (regcomp(&svcurls[i], regexp, REG_EXTENDED | REG_NOSUB))
 
@@ -42,10 +46,9 @@ return address.
 
 [http.c:94]
 sprintf can write beyond the end of envp. envp aliases with env in
-process_client, which is a stack variable of size 8192. Therefore, the
-buffer can be overflowed to overwrite the return address. buf gets
-validated to have the correct request method, but sp2 does not. So
-for example, an attacker could supply request `GET /foo.html
+process_client, which is a static variable of size 8192. The attacker
+could potentially overflow nearby data structures with malicious data.
+For example, an attacker could supply request `GET /foo.html
 <lots of junk bytes that go beyond envp>`.
 
     envp += sprintf(envp, "REQUEST_METHOD=%s", buf) + 1;
@@ -56,6 +59,16 @@ sprintf can overflow envp if the request-uri is long. For example,
 `GET /foo.html?<lots of bytes> HTTP/1.0`
 
     envp += sprintf(envp, "QUERY_STRING=%s", qp + 1) + 1;
+
+[http.c:105]
+url_decode is basically a memcpy with some additional checks on
+certain characters. reqpath points to a stack buffer of size 2048
+in process_client. sp1 points to a string representing the
+request-uri, which can contain up to (8192 - 1) bytes. Therefore,
+if the attacker can provide a buffer with request-uri of size
+greater than 2048 bytes to buffer overflow reqpath.
+
+    url_decode(reqpath, sp1);
 
 [http.c:347]
 strcat can overflow dst, which aliases with name in http_serve_directory,
