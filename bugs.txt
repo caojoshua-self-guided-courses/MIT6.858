@@ -29,9 +29,10 @@ of size greater than 512.
 [http.c:165]
 sprintf is not a safe library function and can write beyond the end
 of envvar. envvar, which is a stack variable is size 512, while buf
-is size 8192 and is provided through user http input. The attacker
-can provide input in which envvar[0] to envvar[512] contains shellcode,
-and beyond envvar[512] contains an overwrited return address.
+is size 8192 and is provided through user http input. The server
+does some string manipulation, such as changing lowercase characters
+to uppercase, so code injection might be challenging here. The
+buffer overflow is still vulnerable to ROP attacks.
 
     sprintf(envvar, "HTTP_%s", buf);
 

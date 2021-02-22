@@ -19,7 +19,7 @@ ssh -p 2222 httpd@localhost
 ```
 And enter password `6858`.
 
-Once in the host, you can access the shared folder with
+Once in the guest, you can access the shared folder with
 ```
 sudo mount -t 9p -o trans=virtio,version=9p2000.L hostshare <path/to/folder>
 ```
