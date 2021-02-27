@@ -4,6 +4,7 @@
 #include <err.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 int main(int argc, char **argv)
@@ -43,8 +44,11 @@ int main(int argc, char **argv)
             /* get all headers */
             if ((errmsg = http_request_headers(sockfd)))
                 http_err(sockfd, 500, "http_request_headers: %s", errmsg);
-            else
-                http_serve(sockfd, getenv("REQUEST_URI"));
+            else {
+                static char env_request_uri[512];
+                strncpy(env_request_uri, getenv("REQUEST_URI"), 512);
+                http_serve(sockfd, env_request_uri, 512);
+            }
             return 0;
         default: /* parent */
             close(sockfd);

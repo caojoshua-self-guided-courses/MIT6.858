@@ -8,7 +8,8 @@
 /** Read the request line like "GET /xxx HTTP/1.0".
  *  \return Error message, or NULL if succeed.
  */
-const char *http_request_line(int fd, char *reqpath, char *env, size_t *env_len);
+const char *http_request_line(int fd, char *reqpath, int reqpath_len, char *env,
+		size_t *env_len, int env_len_max);
 
 /** Read all HTTP request headers.
  *  \return Error message, or NULL if succeed.
@@ -19,7 +20,7 @@ const char *http_request_headers(int fd);
 void http_err(int fd, int code, char *fmt, ...);
 
 /** Dispatcher for generating an HTTP response. */
-void http_serve(int fd, const char *);
+void http_serve(int fd, const char *, int);
 
 void http_serve_none(int fd, const char *);
 
@@ -32,7 +33,7 @@ void http_serve_executable(int fd, const char *);
 void http_set_executable_uid_gid(int uid, int gid);
 
 /** URL decoder. */
-void url_decode(char *dst, const char *src);
+void url_decode(char *dst, const char *src, int n);
 
 /** Unpack and set environmental strings. */
 void env_deserialize(const char *env, size_t len);

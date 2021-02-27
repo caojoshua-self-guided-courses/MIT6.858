@@ -61,7 +61,8 @@ int http_read_line(int fd, char *buf, size_t size)
     return -1;
 }
 
-const char *http_request_line(int fd, char *reqpath, char *env, size_t *env_len)
+const char *http_request_line(int fd, char *reqpath, int reqpath_len, char *env,
+    size_t *env_len, int env_max_len)
 {
     static char buf[8192];      /* static variables are not on the stack */
     char *sp1, *sp2, *qp, *envp = env;
@@ -91,22 +92,22 @@ const char *http_request_line(int fd, char *reqpath, char *env, size_t *env_len)
     if (strcmp(buf, "GET") && strcmp(buf, "POST"))
         return "Unsupported request (not GET or POST)";
 
-    envp += sprintf(envp, "REQUEST_METHOD=%s", buf) + 1;
-    envp += sprintf(envp, "SERVER_PROTOCOL=%s", sp2) + 1;
+    envp += snprintf(envp, env_max_len, "REQUEST_METHOD=%s", buf) + 1;
+    envp += snprintf(envp, env_max_len - (envp - env), "SERVER_PROTOCOL=%s", sp2) + 1;
 
     /* parse out query string, e.g. "foo.py?user=bob" */
     if ((qp = strchr(sp1, '?')))
     {
         *qp = '\0';
-        envp += sprintf(envp, "QUERY_STRING=%s", qp + 1) + 1;
+        envp += snprintf(envp, env_max_len - (envp - env), "QUERY_STRING=%s", qp + 1) + 1;
     }
 
     /* decode URL escape sequences in the requested path into reqpath */
-    url_decode(reqpath, sp1);
+    url_decode(reqpath, sp1, reqpath_len);
 
-    envp += sprintf(envp, "REQUEST_URI=%s", reqpath) + 1;
+    envp += snprintf(envp, env_max_len - (envp - env), "REQUEST_URI=%s", reqpath) + 1;
 
-    envp += sprintf(envp, "SERVER_NAME=zoobar.org") + 1;
+    envp += snprintf(envp, env_max_len - (envp - env), "SERVER_NAME=zoobar.org") + 1;
 
     *envp = 0;
     *env_len = envp - env + 1;
@@ -156,13 +157,13 @@ const char *http_request_headers(int fd)
         }
 
         /* Decode URL escape sequences in the value */
-        url_decode(value, sp);
+        url_decode(value, sp, sizeof(value));
 
         /* Store header in env. variable for application code */
         /* Some special headers don't use the HTTP_ prefix. */
         if (strcmp(buf, "CONTENT_TYPE") != 0 &&
             strcmp(buf, "CONTENT_LENGTH") != 0) {
-            sprintf(envvar, "HTTP_%s", buf);
+            snprintf(envvar, sizeof(envvar) - strlen("HTTP_"), "HTTP_%s", buf);
             setenv(envvar, value, 1);
         } else {
             setenv(buf, value, 1);
@@ -270,7 +271,7 @@ valid_cgi_script(struct stat *st)
     return 1;
 }
 
-void http_serve(int fd, const char *name)
+void http_serve(int fd, const char *name, int name_len)
 {
     void (*handler)(int, const char *) = http_serve_none;
     char pn[1024];
@@ -279,7 +280,7 @@ void http_serve(int fd, const char *name)
     getcwd(pn, sizeof(pn));
     setenv("DOCUMENT_ROOT", pn, 1);
 
-    strcat(pn, name);
+    strncat(pn, name, name_len);
     split_path(pn);
 
     if (!stat(pn, &st))
@@ -340,11 +341,19 @@ void http_serve_file(int fd, const char *pn)
     close(filefd);
 }
 
-void dir_join(char *dst, const char *dirname, const char *filename) {
-    strcpy(dst, dirname);
-    if (dst[strlen(dst) - 1] != '/')
+void dir_join(char *dst, const char *dirname, const char *filename, int dst_max_len) {
+    strncpy(dst, dirname, dst_max_len);
+
+    size_t dst_len = strlen(dst);
+    if (dst_len >= dst_max_len)
+        return;
+
+    if (dst[dst_len - 1] != '/')
         strcat(dst, "/");
-    strcat(dst, filename);
+
+    // fixes buffer overflow in most cases, but does this introduce integer overflow
+    // vulnerability?
+    strncat(dst, filename, dst_max_len - strlen(dst));
 }
 
 void http_serve_directory(int fd, const char *pn) {
@@ -355,9 +364,9 @@ void http_serve_directory(int fd, const char *pn) {
     int i;
 
     for (i = 0; indices[i]; i++) {
-        dir_join(name, pn, indices[i]);
+        dir_join(name, pn, indices[i], 1024);
         if (stat(name, &st) == 0 && S_ISREG(st.st_mode)) {
-            dir_join(name, getenv("SCRIPT_NAME"), indices[i]);
+            dir_join(name, getenv("SCRIPT_NAME"), indices[i], 1024);
             break;
         }
     }
@@ -367,7 +376,7 @@ void http_serve_directory(int fd, const char *pn) {
         return;
     }
 
-    http_serve(fd, name);
+    http_serve(fd, name, 1024);
 }
 
 void http_serve_executable(int fd, const char *pn)
@@ -434,11 +443,17 @@ void http_serve_executable(int fd, const char *pn)
     }
 }
 
-void url_decode(char *dst, const char *src)
+void url_decode(char *dst, const char *src, int n)
 {
+    int i = 0;
     for (;;)
     {
-        if (src[0] == '%' && src[1] && src[2])
+        if (i == n - 1)
+        {
+            *dst = '\0';
+            return;
+        }
+        else if (src[0] == '%' && src[1] && src[2])
         {
             char hexbuf[3];
             hexbuf[0] = src[1];
@@ -463,6 +478,7 @@ void url_decode(char *dst, const char *src)
         }
 
         dst++;
+        ++i;
     }
 }
 

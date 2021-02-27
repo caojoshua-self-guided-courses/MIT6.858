@@ -67,7 +67,7 @@ static void process_client(int fd)
     int i;
 
     /* get the request line */
-    if ((errmsg = http_request_line(fd, reqpath, env, &env_len)))
+    if ((errmsg = http_request_line(fd, reqpath, 2048, env, &env_len, 8192)))
         return http_err(fd, 500, "http_request_line: %s", errmsg);
 
     for (i = 0; i < nsvcs; ++i)
