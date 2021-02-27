@@ -77,3 +77,9 @@ and overwrite a return address. filename is user provided in the
 HTTP request uri.
 
     strcat(dst, filename);
+
+[http.c:http_serve]
+`pn` can be overflowed to overwrite the return address. if `handler` is
+above `pn` on the stack, it can be overwritten to hijack control because
+it is a function pointer called within http_serve. This would be a case
+that stack canaries do not protect against.
