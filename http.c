@@ -271,7 +271,7 @@ valid_cgi_script(struct stat *st)
     return 1;
 }
 
-void http_serve(int fd, const char *name, int name_len)
+void http_serve(int fd, const char *name)
 {
     void (*handler)(int, const char *) = http_serve_none;
     char pn[1024];
@@ -280,7 +280,7 @@ void http_serve(int fd, const char *name, int name_len)
     getcwd(pn, sizeof(pn));
     setenv("DOCUMENT_ROOT", pn, 1);
 
-    strncat(pn, name, name_len);
+    strncat(pn, name, sizeof(pn) - strlen(pn));
     split_path(pn);
 
     if (!stat(pn, &st))
@@ -364,9 +364,9 @@ void http_serve_directory(int fd, const char *pn) {
     int i;
 
     for (i = 0; indices[i]; i++) {
-        dir_join(name, pn, indices[i], 1024);
+        dir_join(name, pn, indices[i], sizeof(name));
         if (stat(name, &st) == 0 && S_ISREG(st.st_mode)) {
-            dir_join(name, getenv("SCRIPT_NAME"), indices[i], 1024);
+            dir_join(name, getenv("SCRIPT_NAME"), indices[i], sizeof(name));
             break;
         }
     }
@@ -376,7 +376,7 @@ void http_serve_directory(int fd, const char *pn) {
         return;
     }
 
-    http_serve(fd, name, 1024);
+    http_serve(fd, name);
 }
 
 void http_serve_executable(int fd, const char *pn)

@@ -46,8 +46,8 @@ int main(int argc, char **argv)
                 http_err(sockfd, 500, "http_request_headers: %s", errmsg);
             else {
                 static char env_request_uri[512];
-                strncpy(env_request_uri, getenv("REQUEST_URI"), 512);
-                http_serve(sockfd, env_request_uri, 512);
+                strncpy(env_request_uri, getenv("REQUEST_URI"), sizeof(env_request_uri));
+                http_serve(sockfd, env_request_uri);
             }
             return 0;
         default: /* parent */

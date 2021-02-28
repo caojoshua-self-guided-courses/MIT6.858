@@ -20,7 +20,7 @@ const char *http_request_headers(int fd);
 void http_err(int fd, int code, char *fmt, ...);
 
 /** Dispatcher for generating an HTTP response. */
-void http_serve(int fd, const char *, int);
+void http_serve(int fd, const char *);
 
 void http_serve_none(int fd, const char *);
 
