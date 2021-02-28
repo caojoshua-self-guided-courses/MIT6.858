@@ -1,6 +1,0 @@
-./zookfs.c
-./http.c
-./zookd.c
-./http.h
-./zookld.c
-./run-shellcode.c
