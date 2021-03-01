@@ -9,7 +9,7 @@ I will be running the VM on Fedora Linux KVM/QEMU. This requires some dependenci
 
 First `cd` into the directory with the VM artifacts. To boot the VM
 ```
-qemu-kvm -m 512 -net nic -net user,hostfwd=tcp:127.0.0.1:2222-:22,hostfwd=tcp:127.0.0.1:8080-:8080 vm-6858.vmdk -fsdev local,path=</path/to/host/folder>,security_model=passthrough,id=fsdev0 -device virtio-9p-pci,id=fs0,fsdev=fsdev0,mount_tag=hostshare
+qemu-kvm -m 512 -net nic -net user,hostfwd=tcp:127.0.0.1:2222-:22,hostfwd=tcp:127.0.0.1:8080-:8080 vm-6858.vmdk -fsdev local,path=</path/to/host/folder>,security_model=none,id=fsdev0 -device virtio-9p-pci,id=fs0,fsdev=fsdev0,mount_tag=hostshare
 ```
 This sets up port forwarding for ssh and the web server. It also sets up file sharing with the host OS, such that both the host and guest can access `</path/to/host/folder>`. This is optional, but is convenient for editing from a local text editor.
 
