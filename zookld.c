@@ -144,16 +144,21 @@ pid_t launch_svc(CONF *conf, const char *name)
                     break;
     }
 
-    if (NCONF_get_number_e(conf, name, "uid", &uid))
+    if ((dir = NCONF_get_string(conf, name, "dir")))
     {
-        /* change real, effective, and saved uid to uid */
-        warnx("setuid %ld", uid);
+      if (!chdir(dir))
+          chroot(".");
+      else
+          warnx("could not chdir into '%s'\n", dir);
     }
 
     if (NCONF_get_number_e(conf, name, "gid", &gid))
     {
         /* change real, effective, and saved gid to gid */
         warnx("setgid %ld", gid);
+        if (setegid(gid)) {
+            warnx("failed to set gid to %ld\n", gid);
+        }
     }
 
     if ((groups = NCONF_get_string(conf, name, "extra_gids")))
@@ -163,14 +168,20 @@ pid_t launch_svc(CONF *conf, const char *name)
         /* set the grouplist to gids */
         for (i = 0; i < ngids; i++)
             warnx("extra gid %d", gids[i]);
+
+        if (setgroups(ngids, gids)) {
+            warnx("failed to add supplementary gids\n");
+        }
     }
 
-    if ((dir = NCONF_get_string(conf, name, "dir")))
+    /* important to stay as root for chroot and set gid. */
+    if (NCONF_get_number_e(conf, name, "uid", &uid))
     {
-      if (!chdir(dir))
-          chroot(".");
-      else
-          warnx("could not chdir into '%s'\n", dir);
+        /* change real, effective, and saved uid to uid */
+        warnx("setuid %ld", uid);
+        if (seteuid(uid)) {
+            warnx("failed to set uid to %ld\n", uid);
+        }
     }
 
     signal(SIGCHLD, SIG_DFL);

@@ -19,8 +19,8 @@ set_perms() {
     local perms="$2"
     local pn="$3"
 
-    chown $ownergroup $pn
-    chmod $perms $pn
+    chown -R $ownergroup $pn
+    chmod -R $perms $pn
 }
 
 rm -rf /jail
@@ -56,8 +56,6 @@ cp /etc/resolv.conf /jail/etc/
 mkdir -p /jail/usr/share/zoneinfo
 cp -r /usr/share/zoneinfo/America /jail/usr/share/zoneinfo/
 
-create_socket_dir /jail/echosvc 61010:61010 755
-
 mkdir -p /jail/tmp
 chmod a+rwxt /jail/tmp
 
@@ -69,4 +67,9 @@ rm -rf /jail/zoobar/db
 
 python /jail/zoobar/zoodb.py init-person
 python /jail/zoobar/zoodb.py init-transfer
+
+chown -R 61012:61012 /jail/zoobar
+set_perms 61012:71012 750 /jail/zoobar/db
+
+create_socket_dir /jail/echosvc 61010:61010 755
 
