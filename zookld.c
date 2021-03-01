@@ -167,7 +167,10 @@ pid_t launch_svc(CONF *conf, const char *name)
 
     if ((dir = NCONF_get_string(conf, name, "dir")))
     {
-        /* chroot into dir */
+      if (!chdir(dir))
+          chroot(".");
+      else
+          warnx("could not chdir into '%s'\n", dir);
     }
 
     signal(SIGCHLD, SIG_DFL);
