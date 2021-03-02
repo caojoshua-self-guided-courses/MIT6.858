@@ -5,6 +5,8 @@
 /zookd-nxstack
 /zookd-withssp
 /zookfs
+/zookfs-static
+/zookfs-dynamic
 /zookfs-exstack
 /zookfs-nxstack
 /zookfs-withssp

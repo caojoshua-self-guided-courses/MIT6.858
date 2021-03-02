@@ -19,8 +19,8 @@ set_perms() {
     local perms="$2"
     local pn="$3"
 
-    chown -R $ownergroup $pn
-    chmod -R $perms $pn
+    chown $ownergroup $pn
+    chmod $perms $pn
 }
 
 rm -rf /jail
@@ -68,8 +68,13 @@ rm -rf /jail/zoobar/db
 python /jail/zoobar/zoodb.py init-person
 python /jail/zoobar/zoodb.py init-transfer
 
-chown -R 61012:61012 /jail/zoobar
-set_perms 61012:71012 750 /jail/zoobar/db
+set_perms 61013:61013 755 /jail/zoobar/index.cgi
+
+set_perms 61013:61000 755 /jail/zoobar/db
+set_perms 61013:61000 755 /jail/zoobar/db/person
+set_perms 61013:61000 755 /jail/zoobar/db/transfer
+set_perms 61013:61000 644 /jail/zoobar/db/person/person.db
+set_perms 61013:61000 644 /jail/zoobar/db/transfer/transfer.db
 
 create_socket_dir /jail/echosvc 61010:61010 755
 
