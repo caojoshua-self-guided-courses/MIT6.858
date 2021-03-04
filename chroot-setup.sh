@@ -66,6 +66,7 @@ cp -r zoobar /jail/
 rm -rf /jail/zoobar/db
 
 python /jail/zoobar/zoodb.py init-person
+python /jail/zoobar/zoodb.py init-cred
 python /jail/zoobar/zoodb.py init-transfer
 
 set_perms 61013:61013 755 /jail/zoobar/index.cgi
