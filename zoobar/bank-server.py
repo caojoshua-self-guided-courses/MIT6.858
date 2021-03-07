@@ -12,6 +12,9 @@ class BankRpcServer(rpclib.RpcServer):
     def rpc_balance(self, username):
         log('rpc balance')
 
+    def rpc_get_log(self, username):
+        log('rpc get log')
+
 (_, dummy_zookld_fd, sockpath) = sys.argv
 
 s = BankRpcServer()
