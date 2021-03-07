@@ -16,11 +16,7 @@ class BankRpcServer(rpclib.RpcServer):
         return bank.balance(username)
 
     def rpc_get_log(self, username):
-        foo = bank.get_log(username)
-        log(foo)
-        log(type(foo))
-        return foo
-        # return bank.get_log(username)
+        return bank.get_log(username)
 
 (_, dummy_zookld_fd, sockpath) = sys.argv
 

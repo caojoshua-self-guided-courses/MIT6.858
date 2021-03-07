@@ -34,10 +34,10 @@
     <th>Recipient</th>
     <th>Amount</th></tr>
 {% for transfer in transfers %}
-<tr><td align="center">{{ transfer.time }}</td>
-    <td align="center">{{ transfer.sender }}</td>
-    <td align="center">{{ transfer.recipient }}</td>
-    <td align="center">{{ transfer.amount }}</td></tr>
+<tr><td align="center">{{ transfer['time'] }}</td>
+    <td align="center">{{ transfer['sender'] }}</td>
+    <td align="center">{{ transfer['recipient'] }}</td>
+    <td align="center">{{ transfer['amount'] }}</td></tr>
 {% endfor %}
 </table>
 {% endif %}

@@ -48,6 +48,12 @@ def balance(username):
 
 def get_log(username):
     db = transfer_setup()
-    return db.query(Transfer).filter(or_(Transfer.sender==username,
+    query = db.query(Transfer).filter(or_(Transfer.sender==username,
                                          Transfer.recipient==username))
+    return [
+        {'time': transfer.time,
+        'sender': transfer.sender,
+        'recipient': transfer.recipient,
+        'amount': transfer.amount}
+        for transfer in query]
 
