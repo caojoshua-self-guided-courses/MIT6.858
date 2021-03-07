@@ -86,4 +86,5 @@ set_perms 61015:61000 600 /jail/zoobar/db/bank/bank.db
 
 create_socket_dir /jail/echosvc 61010:61010 755
 create_socket_dir /jail/authsvc 61014:61014 755
+create_socket_dir /jail/banksvc 61015:61015 755
 
