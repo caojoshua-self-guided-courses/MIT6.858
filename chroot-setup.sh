@@ -77,7 +77,7 @@ set_perms 61013:61000 755 /jail/zoobar/db/transfer
 set_perms 61013:61000 600 /jail/zoobar/db/person/person.db
 set_perms 61013:61000 600 /jail/zoobar/db/transfer/transfer.db
 
-set_perms 61014:61000 755 /jail/zoobar/db/cred
+set_perms 61014:61000 700 /jail/zoobar/db/cred
 set_perms 61014:61000 600 /jail/zoobar/db/cred/cred.db
 
 create_socket_dir /jail/echosvc 61010:61010 755
