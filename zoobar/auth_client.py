@@ -14,4 +14,4 @@ def register(username, password):
 
 def check_token(username, token):
     with rpclib.client_connect(auth_sock) as c:
-        c.call('check_token', username=username, token=token)
+        return c.call('check_token', username=username, token=token)

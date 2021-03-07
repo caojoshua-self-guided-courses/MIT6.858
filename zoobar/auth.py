@@ -11,12 +11,12 @@ def newtoken(db, cred):
     return cred.token
 
 def login(username, password):
-    db = person_setup()
-    person = db.query(Person).get(username)
-    if not person:
+    db = cred_setup()
+    cred = db.query(Cred).get(username)
+    if not cred:
         return None
-    if person.password == password:
-        return newtoken(db, person)
+    if cred.password == password:
+        return newtoken(db, cred)
     else:
         return None
 
@@ -33,9 +33,9 @@ def register(username, password):
     return newtoken(db, newcred)
 
 def check_token(username, token):
-    db = person_setup()
-    person = db.query(Person).get(username)
-    if person and person.token == token:
+    db = cred_setup()
+    cred = db.query(Cred).get(username)
+    if cred and cred.token == token:
         return True
     else:
         return False
