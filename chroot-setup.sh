@@ -74,12 +74,13 @@ set_perms 61013:61013 755 /jail/zoobar/index.cgi
 
 set_perms 61013:61000 755 /jail/zoobar/db
 set_perms 61013:61000 755 /jail/zoobar/db/person
-set_perms 61013:61000 755 /jail/zoobar/db/transfer
 set_perms 61013:61000 600 /jail/zoobar/db/person/person.db
-set_perms 61013:61000 600 /jail/zoobar/db/transfer/transfer.db
 
 set_perms 61014:61000 700 /jail/zoobar/db/cred
 set_perms 61014:61000 600 /jail/zoobar/db/cred/cred.db
+
+set_perms 61015:61000 755 /jail/zoobar/db/transfer
+set_perms 61015:61000 600 /jail/zoobar/db/transfer/transfer.db
 
 set_perms 61015:61000 700 /jail/zoobar/db/bank
 set_perms 61015:61000 600 /jail/zoobar/db/bank/bank.db

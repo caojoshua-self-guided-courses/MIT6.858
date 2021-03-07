@@ -15,7 +15,6 @@ def users():
         persondb = person_setup()
         user = persondb.query(Person).get(request.values['user'])
         if user:
-            transferdb = transfer_setup()
             p = user.profile
             if p.startswith("#!python"):
                 p = run_profile(user)

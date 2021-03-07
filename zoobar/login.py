@@ -4,6 +4,7 @@ from debug import *
 from zoodb import *
 
 import auth_client
+import bank_client
 import bank
 import random
 
@@ -13,6 +14,7 @@ class User(object):
 
     def checkLogin(self, username, password):
         token = auth_client.login(username, password)
+
         if token is not None:
             return self.loginCookie(username, token)
         else:
@@ -25,21 +27,27 @@ class User(object):
     def logout(self):
         self.person = None
 
-    def addRegistration(self, username, password):
-        token = auth_client.register(username, password)
-        if token is None:
-            return None
-
+    def addPersonRegistration(self, username):
         db = person_setup()
         person = db.query(Person).get(username)
         if person:
             # This should never happen, becuase auth_client would have
             # returned null token
-            return None
+            return False
         newperson = Person()
         newperson.username = username
         db.add(newperson)
         db.commit()
+        return True
+
+    def addRegistration(self, username, password):
+        token = auth_client.register(username, password)
+        if token is None:
+            return None
+        if not self.addPersonRegistration(username):
+            return None
+        if not bank_client.add_registration(username):
+            return None
         return self.loginCookie(username, token)
 
     def checkCookie(self, cookie):
@@ -53,7 +61,7 @@ class User(object):
         persondb = person_setup()
         self.person = persondb.query(Person).get(username)
         self.token = token
-        self.zoobars = bank.balance(username)
+        self.zoobars = bank_client.balance(username)
 
 def logged_in():
     g.user = User()

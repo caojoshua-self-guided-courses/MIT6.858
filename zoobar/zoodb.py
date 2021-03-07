@@ -12,7 +12,6 @@ BankBase = declarative_base()
 class Person(PersonBase):
     __tablename__ = "person"
     username = Column(String(128), primary_key=True)
-    zoobars = Column(Integer, nullable=False, default=10)
     profile = Column(String(5000), nullable=False, default="")
 
 class Cred(CredBase):

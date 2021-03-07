@@ -2,18 +2,25 @@
 
 import rpclib
 import sys
-import auth
+import bank
 from debug import *
 
 class BankRpcServer(rpclib.RpcServer):
+    def rpc_add_registration(self, username):
+        return bank.add_registration(username)
+
     def rpc_transfer(self, sender, recipient, zoobars):
-        log('rpc transfer')
+        return bank.transfer(sender, recipient, zoobars)
 
     def rpc_balance(self, username):
-        log('rpc balance')
+        return bank.balance(username)
 
     def rpc_get_log(self, username):
-        log('rpc get log')
+        foo = bank.get_log(username)
+        log(foo)
+        log(type(foo))
+        return foo
+        # return bank.get_log(username)
 
 (_, dummy_zookld_fd, sockpath) = sys.argv
 

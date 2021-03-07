@@ -3,10 +3,23 @@ from debug import *
 
 import time
 
+def add_registration(username):
+    db = bank_setup()
+    person = db.query(Bank).get(username)
+    if person:
+        # This should never happen, becuase auth_client would have
+        # returned null token
+        return False
+    newbank = Bank()
+    newbank.username = username
+    db.add(newbank)
+    db.commit()
+    return True
+
 def transfer(sender, recipient, zoobars):
-    persondb = person_setup()
-    senderp = persondb.query(Person).get(sender)
-    recipientp = persondb.query(Person).get(recipient)
+    bankdb = bank_setup()
+    senderp = bankdb.query(Bank).get(sender)
+    recipientp = bankdb.query(Bank).get(recipient)
 
     sender_balance = senderp.zoobars - zoobars
     recipient_balance = recipientp.zoobars + zoobars
@@ -16,7 +29,7 @@ def transfer(sender, recipient, zoobars):
 
     senderp.zoobars = sender_balance
     recipientp.zoobars = recipient_balance
-    persondb.commit()
+    bankdb.commit()
 
     transfer = Transfer()
     transfer.sender = sender
@@ -29,9 +42,9 @@ def transfer(sender, recipient, zoobars):
     transferdb.commit()
 
 def balance(username):
-    db = person_setup()
-    person = db.query(Person).get(username)
-    return person.zoobars
+    db = bank_setup()
+    bank = db.query(Bank).get(username)
+    return bank.zoobars
 
 def get_log(username):
     db = transfer_setup()
