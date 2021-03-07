@@ -27,7 +27,6 @@ def register(username, password):
         return None
     newperson = Person()
     newperson.username = username
-    newperson.password = password
     db.add(newperson)
     db.commit()
     return newtoken(db, newperson)

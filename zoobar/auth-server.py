@@ -6,8 +6,17 @@ import auth
 from debug import *
 
 class AuthRpcServer(rpclib.RpcServer):
-    ## Fill in RPC methods here.
-    pass
+    def rpc_login(self, username, password):
+        log("rpc login")
+        pass
+
+    def rpc_register(self, username, password):
+        log("rpc register")
+        pass
+
+    def rpc_check_token(self, username, token):
+        log("rpc_check_token")
+        pass
 
 (_, dummy_zookld_fd, sockpath) = sys.argv
 
