@@ -68,6 +68,7 @@ rm -rf /jail/zoobar/db
 python /jail/zoobar/zoodb.py init-person
 python /jail/zoobar/zoodb.py init-cred
 python /jail/zoobar/zoodb.py init-transfer
+python /jail/zoobar/zoodb.py init-bank
 
 set_perms 61013:61013 755 /jail/zoobar/index.cgi
 
@@ -79,6 +80,9 @@ set_perms 61013:61000 600 /jail/zoobar/db/transfer/transfer.db
 
 set_perms 61014:61000 700 /jail/zoobar/db/cred
 set_perms 61014:61000 600 /jail/zoobar/db/cred/cred.db
+
+set_perms 61015:61000 700 /jail/zoobar/db/bank
+set_perms 61015:61000 600 /jail/zoobar/db/bank/bank.db
 
 create_socket_dir /jail/echosvc 61010:61010 755
 create_socket_dir /jail/authsvc 61014:61014 755
