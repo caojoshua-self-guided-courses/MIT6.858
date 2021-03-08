@@ -1,4 +1,5 @@
 from debug import *
+from flask import g
 from zoodb import *
 import rpclib
 
@@ -10,7 +11,8 @@ def add_registration(username):
 
 def transfer(sender, recipient, zoobars):
     with rpclib.client_connect(bank_sock) as c:
-        return c.call('transfer', sender=sender, recipient=recipient, zoobars=zoobars)
+        return c.call('transfer', sender=sender, recipient=recipient, zoobars=zoobars,
+                token=g.user.token)
 
 def balance(username):
     with rpclib.client_connect(bank_sock) as c:
