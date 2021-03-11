@@ -7,7 +7,7 @@ import sandboxlib
 import urllib
 import hashlib
 import socket
-import bank
+import bank_client
 import zoodb
 
 from debug import *
@@ -28,14 +28,7 @@ class ProfileAPIServer(rpclib.RpcServer):
         return self.visitor
 
     def rpc_get_xfers(self, username):
-        xfers = []
-        for xfer in bank.get_log(username):
-            xfers.append({ 'sender': xfer.sender,
-                           'recipient': xfer.recipient,
-                           'amount': xfer.amount,
-                           'time': xfer.time,
-                         })
-        return xfers
+        return bank_client.get_log(username)
 
     def rpc_get_user_info(self, username):
         person_db = zoodb.person_setup()
@@ -44,11 +37,12 @@ class ProfileAPIServer(rpclib.RpcServer):
             return None
         return { 'username': p.username,
                  'profile': p.profile,
-                 'zoobars': bank.balance(username),
+                 'zoobars': bank_client.balance(username),
                }
 
     def rpc_xfer(self, target, zoobars):
-        bank.transfer(self.user, target, zoobars)
+        token = zoodb.cred_setup().query(zoodb.Cred).get(self.user).token
+        bank_client.transfer(self.user, target, zoobars, token)
 
 def run_profile(pcode, profile_api_client):
     globals = {'api': profile_api_client}

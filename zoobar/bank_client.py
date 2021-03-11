@@ -9,10 +9,12 @@ def add_registration(username):
     with rpclib.client_connect(bank_sock) as c:
         return c.call('add_registration', username=username)
 
-def transfer(sender, recipient, zoobars):
+def transfer(sender, recipient, zoobars, token=None):
+    if token is None:
+        token = g.user.token
     with rpclib.client_connect(bank_sock) as c:
         return c.call('transfer', sender=sender, recipient=recipient, zoobars=zoobars,
-                token=g.user.token)
+                token=token)
 
 def balance(username):
     with rpclib.client_connect(bank_sock) as c:
