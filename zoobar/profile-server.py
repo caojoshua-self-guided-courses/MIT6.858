@@ -53,6 +53,11 @@ class ProfileServer(rpclib.RpcServer):
         uid = 61013
 
         userdir = '/tmp'
+        userdir = '/' + visitor
+        if not os.path.exists(userdir):
+            os.mkdir(userdir)
+            os.chmod(userdir, 0o700)
+            os.chown(userdir, uid, uid)
 
         (sa, sb) = socket.socketpair(socket.AF_UNIX, socket.SOCK_STREAM, 0)
         pid = os.fork()
