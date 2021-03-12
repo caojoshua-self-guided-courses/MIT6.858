@@ -17,9 +17,11 @@ import time
 import errno
 
 class ProfileAPIServer(rpclib.RpcServer):
-    def __init__(self, user, visitor):
+    def __init__(self, user, visitor, token, uid):
         self.user = user
         self.visitor = visitor
+        self.token = token
+        os.setuid(uid)
 
     def rpc_get_self(self):
         return self.user
@@ -41,8 +43,7 @@ class ProfileAPIServer(rpclib.RpcServer):
                }
 
     def rpc_xfer(self, target, zoobars):
-        token = zoodb.cred_setup().query(zoodb.Cred).get(self.user).token
-        bank_client.transfer(self.user, target, zoobars, token)
+        bank_client.transfer(self.user, target, zoobars, self.token)
 
 def run_profile(pcode, profile_api_client):
     globals = {'api': profile_api_client}
@@ -64,7 +65,8 @@ class ProfileServer(rpclib.RpcServer):
         if pid == 0:
             if os.fork() <= 0:
                 sa.close()
-                ProfileAPIServer(user, visitor).run_sock(sb)
+                token = zoodb.cred_setup().query(zoodb.Cred).get(user).token
+                ProfileAPIServer(user, visitor, token, uid).run_sock(sb)
                 sys.exit(0)
             else:
                 sys.exit(0)
