@@ -13,3 +13,6 @@
 /zooksvc
 /run-shellcode
 /submit.key
+*.pyc
+/tags
+/cscope.*
