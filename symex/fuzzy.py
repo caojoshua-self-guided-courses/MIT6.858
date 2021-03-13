@@ -740,5 +740,15 @@ def concolic_test(testfunc, maxiter = 100, verbose = 0):
     ##   the overall constraint, so be sure to preserve values
     ##   from the initial input (concrete_values).
 
+    for branch_constr in cur_path_constr:
+        constr = sym_not(branch_constr)
+        if (constr in checked):
+            continue
+        checked.add(constr)
+
+        (ok, model) = fork_and_check(constr)
+        if ok == z3.sat:
+            inputs.add(model, get_caller())
+
   if verbose > 0:
     print 'Stopping after', iter, 'iterations'
