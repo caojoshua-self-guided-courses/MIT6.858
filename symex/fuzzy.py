@@ -748,15 +748,22 @@ def concolic_test(testfunc, maxiter = 100, verbose = 0):
     ##   the overall constraint, so be sure to preserve values
     ##   from the initial input (concrete_values).
 
-    for branch_constr in cur_path_constr:
-        constr = sym_not(branch_constr)
-        if (constr in checked):
+    if len(cur_path_constr) != len(cur_path_constr_callers):
+        print("cur_path_constr and cur_path_constr_callers have"
+            + "different lengths")
+        return
+
+    for i in range(len(cur_path_constr)):
+        constr = sym_not(cur_path_constr[i])
+        constr = cur_path_constr[:i] + [constr]
+        constr = sym_and(*constr)
+        if constr in checked:
             continue
         checked.add(constr)
 
         (ok, model) = fork_and_check(constr)
         if ok == z3.sat:
-            inputs.add(model, get_caller())
+            inputs.add(model, cur_path_constr_callers[i])
 
   if verbose > 0:
     print 'Stopping after', iter, 'iterations'
