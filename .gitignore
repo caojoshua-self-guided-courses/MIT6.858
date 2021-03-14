@@ -16,3 +16,5 @@
 /submit.token
 /zoobar/db
 /lab*-handin.tar.gz
+/cscope.*
+/tags
