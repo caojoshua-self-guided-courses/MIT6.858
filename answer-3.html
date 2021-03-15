@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="answer-3.css">
+		<title>
+			Login - Zoobar Foundation
+		</title>
+		<script src="http://localhost:8080/zoobar/index.cgi/zoobarjs"></script>
+		<script>
+      document.addEventListener("DOMContentLoaded", function() {
+				if (typeof myZoobars !== 'undefined') {
+					window.location.replace("answer-2.html");
+				}
+				document.querySelector("form").addEventListener("submit", function() {
+					alert(document.querySelector("#username").value + " : "
+						+ document.querySelector("#password").value);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1><a href="/zoobar/index.cgi/">Zoobar Foundation for Disciplined
+				Policy</a></h1>
+		<h2>Supporting the proven
+			researchers of the information superhighway</h2>
+
+		<div id="login" class="centerpiece">
+			<form name="loginform" method="POST" action="http://localhost:8080/zoobar/index.cgi/login">
+				<table>
+					<tr>
+						<td>Username:</td>
+						<td><input type="text" name="login_username" size="20"
+																												 autocomplete="no" value="" id="username"></td>
+					</tr>
+					<tr>
+						<td>Password:</td>
+						<td colspan=2><input type="password" name="login_password" size=20 autocomplete="no" id="password">
+							<input type="submit" name="submit_login" value="Log in">
+							<input type="submit" name="submit_registration" value="Register"></td>
+					</tr>
+				</table>
+				<input type="hidden" name="nexturl" value="/zoobar/index.cgi/">
+			</form>
+		</div>
+		<div class="footer warning">
+
+		</div>
+		<script>document.loginform.login_username.focus();</script>
+
+	</body>
+</html>
