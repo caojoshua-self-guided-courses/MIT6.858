@@ -54,7 +54,10 @@ libcode = '''
         return t;
     }
     function sandbox_setTimeout(callback, time) {
-        setTimeout(callback, time);
+        if (typeof callback === "function") {
+            return setTimeout(callback, time);
+        }
+        return null;
     }
 </script>
 '''
