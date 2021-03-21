@@ -1,6 +1,15 @@
 # MIT 6.858 Computer Systems Security
 
-Self learning of [MIT 6.858 Computer Systems Security from MIT Open Courseware](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-858-computer-systems-security-fall-2014/index.htm). This course is suitable for self learning because it provides labs, lecture videos, readings and more. This repository is forked from the original repo (git://g.csail.mit.edu/6.858-lab-2014) and contains the 6 lab assignments.
+Self learning of [MIT 6.858 Computer Systems Security from MIT Open Courseware](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-858-computer-systems-security-fall-2014/index.htm). This course is suitable for self learning because it provides labs, lecture videos, readings and more.
+
+## Organization
+This repository is forked from the original repo (git://g.csail.mit.edu/6.858-lab-2014) and contains the 6 lab assignments.
+* The [main branch](https://github.com/caojoshua/MIT6.858/) holds lab1 and lab2
+* The [lab3 branch](https://github.com/caojoshua/MIT6.858/tree/lab3) holds lab3
+* The [lab5 branch](https://github.com/caojoshua/MIT6.858/tree/lab5) holds lab5
+* The [lab6 branch](https://github.com/caojoshua/MIT6.858/tree/lab6) holds lab6
+
+The latest commit of each branch holds the final solution of the lab. I skipped lab4 because it only involves writeups of theoretical exploits.
 
 ## Setup
 The labs are run on the VM image provided on the course website. The VM can be run in many ways. For example, course suggests VMware.
