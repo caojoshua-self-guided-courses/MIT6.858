@@ -40,8 +40,10 @@ libcode = '''
         }
     }
     function bracket_check(s) {
-        if (dangerous_props.includes(s)) {
-            return "";
+        for (var i = 0; i < dangerous_props.length; ++i) {
+            if (dangerous_props[i] === s) {
+                return null;
+            }
         }
         return s;
     }
