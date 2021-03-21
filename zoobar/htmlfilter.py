@@ -15,14 +15,34 @@ libcode = '''
             "__defineSetter__"];
     var invalid_prop = "__invalid__";
 
+    function get_sandbox_element(e) {
+        return {
+            get onclick() { return e.onclick; },
+            set onclick(h) {
+                // No concerns if h doesn't have arguments.
+                if (h.length === 0) {
+                    e.onclick = h;
+                    return;
+                }
+
+                e.onclick = function(evt) {
+                    // Create copy of evt with target overwritten to be a sandbox element;
+                    var new_evt = Object.create(evt, {
+                        target: {
+                            value: get_sandbox_element(evt.target)
+                        }
+                    });
+                    return h(new_evt);
+                };
+            },
+            get textContent() { return e.textContent; },
+        };
+    }
+
     var sandbox_document = {
         getElementById: function(id) {
             var e = document.getElementById('sandbox-' + id);
-            return {
-                get onclick() { return e.onclick; },
-                set onclick(h) { e.onclick = h; },
-                get textContent() { return e.textContent; },
-            }
+            return get_sandbox_element(e);
         },
     };
 
