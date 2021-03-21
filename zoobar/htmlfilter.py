@@ -36,6 +36,7 @@ libcode = '''
                 };
             },
             get textContent() { return e.textContent; },
+            set textContent(t) { e.textContent = t; },
         };
     }
 
