@@ -21,6 +21,7 @@ libcode = '''
             return {
                 get onclick() { return e.onclick; },
                 set onclick(h) { e.onclick = h; },
+                get textContent() { return e.textContent; },
             }
         },
     };
