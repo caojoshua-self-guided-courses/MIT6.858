@@ -44,6 +44,12 @@ libcode = '''
         }
         return s;
     }
+    function this_check(t) {
+        if (t === window) {
+            return null;
+        }
+        return t;
+    }
     function sandbox_setTimeout(callback, time) {
         setTimeout(callback, time);
     }
