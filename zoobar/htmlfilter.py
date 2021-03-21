@@ -39,11 +39,28 @@ libcode = '''
         } catch (e) {
         }
     }
-    function bracket_check(s) {
+    function is_dangerous_prop(s) {
         for (var i = 0; i < dangerous_props.length; ++i) {
-            if (dangerous_props[i] === s) {
+            if (dangerous_props[i] === s ||
+                dangerous_props[i] === s.toString() ||
+                dangerous_props[i] === s.valueOf()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    function bracket_check(s) {
+        s.oldToString = s.toString;
+        s.toString = function() {
+            var toStringResult = s.oldToString();
+            if (is_dangerous_prop(toStringResult)) {
                 return null;
             }
+            return s;
+        };
+
+        if (is_dangerous_prop(s)) {
+            return null;
         }
         return s;
     }
