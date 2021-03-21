@@ -29,6 +29,16 @@ from slimit import ast
 
 class LabVisitor(object):
 
+    prefix = "sandbox_"
+    in_expression_prop = "_in_expression"
+
+    dangerous_props = [
+            "__proto__",
+            "constructor",
+            "__defineGetter__",
+            "__defineSetter__"]
+    invalid_prop = "__invalid__"
+
     def __init__(self):
         self.indent_level = 0
 
@@ -66,6 +76,8 @@ class LabVisitor(object):
         return ''.join(output)
 
     def visit_Identifier(self, node):
+        if hasattr(node, LabVisitor.in_expression_prop) and getattr(node, LabVisitor.in_expression_prop):
+            return LabVisitor.prefix + node.value
         return node.value
 
     def visit_Assign(self, node):
@@ -322,11 +334,16 @@ class LabVisitor(object):
             template = '(%s.%s)'
         else:
             template = '%s.%s'
-        s = template % (self.visit(node.node), self.visit(node.identifier))
+
+        identifier = self.visit(node.identifier)
+        if identifier in LabVisitor.dangerous_props:
+            identifier = LabVisitor.invalid_prop
+
+        s = template % (self.visit(node.node), identifier)
         return s
 
     def visit_BracketAccessor(self, node):
-        s = '%s[%s]' % (self.visit(node.node), self.visit(node.expr))
+        s = '%s[bracket_check(%s)]' % (self.visit(node.node), self.visit(node.expr))
         return s
 
     def visit_FunctionCall(self, node):

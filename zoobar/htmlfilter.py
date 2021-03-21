@@ -8,6 +8,13 @@ from debug import *
 
 libcode = '''
 <script>
+    var dangerous_props = [
+            "__proto__",
+            "constructor",
+            "__defineGetter__",
+            "__defineSetter__"];
+    var invalid_prop = "__invalid__";
+
     var sandbox_document = {
         getElementById: function(id) {
             var e = document.getElementById('sandbox-' + id);
@@ -30,6 +37,15 @@ libcode = '''
             eval(its_okay_no_one_will_ever_define_this_variable);
         } catch (e) {
         }
+    }
+    function bracket_check(s) {
+        if (dangerous_props.includes(s)) {
+            return "";
+        }
+        return s;
+    }
+    function sandbox_setTimeout(callback, time) {
+        setTimeout(callback, time);
     }
 </script>
 '''
