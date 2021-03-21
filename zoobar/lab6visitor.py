@@ -70,7 +70,7 @@ class LabVisitor(object):
 
     def visit_VarDecl(self, node):
         output = []
-        output.append(self.visit(node.identifier))
+        output.append(LabVisitor.prefix + self.visit(node.identifier))
         if node.initializer is not None:
             output.append(' = %s' % self.visit(node.initializer))
         return ''.join(output)
@@ -275,9 +275,9 @@ class LabVisitor(object):
                              for element in node.elements)
         self.indent_level -= 2
 
-        s = 'function %s(%s) {\n%s' % (
+        s = 'function ' + LabVisitor.prefix + '%s(%s) {\n%s' % (
             self.visit(node.identifier),
-            ', '.join(self.visit(param) for param in node.parameters),
+            ', '.join(LabVisitor.prefix + self.visit(param) for param in node.parameters),
             elements,
             )
         s += '\n' + self._make_indent() + '}'
@@ -297,7 +297,7 @@ class LabVisitor(object):
             header = '(' + header
         s = (header + ' {\n%s') % (
             ident,
-            ', '.join(self.visit(param) for param in node.parameters),
+            ', '.join(LabVisitor.prefix + self.visit(param) for param in node.parameters),
             elements,
             )
         s += '\n' + self._make_indent() + '}'
