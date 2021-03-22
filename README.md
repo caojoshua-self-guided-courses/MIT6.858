@@ -11,6 +11,8 @@ This repository is forked from the original repo (git://g.csail.mit.edu/6.858-la
 
 The latest commit of each branch holds the final solution of the lab. I skipped lab4 because it only involves writeups of theoretical exploits.
 
+I included some of my [final thoughts](https://github.com/caojoshua/MIT6.858/blob/main/final_thoughts.md) in the main branch.
+
 ## Setup
 The labs are run on the VM image provided on the course website. The VM can be run in many ways. For example, course suggests VMware.
 
